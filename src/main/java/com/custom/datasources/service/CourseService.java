@@ -25,33 +25,34 @@ public class CourseService implements DAO<Course> {
     };
 
     @Override
-    public List<Course> getCourses() {
+    public List<Course> getAll() {
         String query = "select * from courses";
         return jdbcTemplate.query(query, rowMapper);
     }
 
     @Override
     public Course create(Course course) {
-        return null;
+        String query = "insert into courses(course_name) values (?)";
+        jdbcTemplate.update(query,course.getCourse_name());
+        return course;
     }
 
     @Override
     public Course update(Course course, int id) {
+        String query = "update courses set course_name = ? where course_id = ?";
+        jdbcTemplate.update(query, course.getCourse_name(), id);
         return null;
     }
 
     @Override
-    public void delete(int id) {
-
+    public int delete(int id) { //return type int to be able to identify non existent course_id's
+        String query = "delete from courses where course_id = ?";
+        return jdbcTemplate.update(query, id);
     }
 
     @Override
     public Course getById(int id) {
-        return null;
-    }
-
-    @Override
-    public void insert(Course course) {
-
+        String query = "select * from courses where course_id = ?";
+        return jdbcTemplate.queryForObject(query, rowMapper, id);
     }
 }
