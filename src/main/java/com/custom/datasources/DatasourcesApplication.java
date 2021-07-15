@@ -1,12 +1,17 @@
 package com.custom.datasources;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.custom.datasources.service.CourseService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class DatasourcesApplication {
+
+    private static CourseService courseService;
+
+    public DatasourcesApplication(CourseService courseService){
+        DatasourcesApplication.courseService = courseService;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(DatasourcesApplication.class, args);
