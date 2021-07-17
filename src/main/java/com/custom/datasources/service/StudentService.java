@@ -1,7 +1,8 @@
 package com.custom.datasources.service;
 
+import com.custom.datasources.model.Course;
 import com.custom.datasources.model.Student;
-import com.custom.datasources.repository.StudentDAO;
+import com.custom.datasources.repository.DAO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class StudentService implements StudentDAO<Student> {
+public class StudentService implements DAO<Student> {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -17,18 +18,26 @@ public class StudentService implements StudentDAO<Student> {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    RowMapper<Student> rowMapper = (rs, rowNum) -> {
+    RowMapper<Student> rowStudents = (rs, rowNum) -> {
         Student student = new Student();
+        student.setId(rs.getInt("id"));
         student.setStudent_id(rs.getString("student_id"));
         student.setFirst_name(rs.getString("first_name"));
         student.setLast_name(rs.getString("last_name"));
         return student;
     };
 
+    RowMapper<Course> rowCourses = (rs, rowNum) -> {
+        Course course = new Course();
+        course.setCourse_id(rs.getInt("course_id"));
+        course.setCourse_name(rs.getString("course_name"));
+        return course;
+    };
+
     @Override
     public List<Student> getAll() {
         String query = "select  * from students";
-        return jdbcTemplate.query(query, rowMapper);
+        return jdbcTemplate.query(query, rowStudents);
     }
 
     @Override
@@ -36,29 +45,33 @@ public class StudentService implements StudentDAO<Student> {
         String query = "insert into students(student_id, first_name, last_name) values" +
                 "(?,?,?)";
             jdbcTemplate.update(query,
+                    student.getStudent_id(),
                     student.getFirst_name(),
-                    student.getLast_name(),
-                    student.getStudent_id());
+                    student.getLast_name());
+
         return student;
     }
 
     @Override
-    public Student update(Student student) {
-        String query = "update students set student_id = ? , first_name = ?, last_name = ?";
-        jdbcTemplate.update(query, student.getStudent_id(), student.getFirst_name(), student.getLast_name());
+    public Student update(Student student, int id) {
+        String query = "update students set student_id = ? , first_name = ?, last_name = ? where id = ?";
+        jdbcTemplate.update(query,
+                student.getStudent_id(),
+                student.getFirst_name(),
+                student.getLast_name(),
+                id);
         return student;
     }
 
     @Override
-    public int delete(Student student) {
-        String query = "delete from students where student_id = ?";
-        return jdbcTemplate.update(query, student.getStudent_id());
+    public int delete(int id) {
+        String query = "delete from students where id = ?";
+        return jdbcTemplate.update(query, id);
     }
 
     @Override
-    public Student getById(Student student) {
-        String query = "select * from students where student_id = ?";
-        jdbcTemplate.queryForObject(query, rowMapper, student.getStudent_id());
-        return student;
+    public Student getById(int id) {
+        String query = "select * from students where id = ?";
+        return jdbcTemplate.queryForObject(query, rowStudents, id);
     }
 }
