@@ -1,6 +1,5 @@
 package com.custom.datasources.service;
 
-import com.custom.datasources.model.Course;
 import com.custom.datasources.model.Student;
 import com.custom.datasources.repository.DAO;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,13 +24,6 @@ public class StudentService implements DAO<Student> {
         student.setFirst_name(rs.getString("first_name"));
         student.setLast_name(rs.getString("last_name"));
         return student;
-    };
-
-    RowMapper<Course> rowCourses = (rs, rowNum) -> {
-        Course course = new Course();
-        course.setCourse_id(rs.getInt("course_id"));
-        course.setCourse_name(rs.getString("course_name"));
-        return course;
     };
 
     @Override

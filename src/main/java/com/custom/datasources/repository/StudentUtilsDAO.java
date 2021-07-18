@@ -4,15 +4,13 @@ import java.util.List;
 
 public interface StudentUtilsDAO<T> {
 
-   // List<T> getAll();
-
-    void addCourses(String s, List<Integer> t);
+    String addCourses(String s, List<Integer> t);
 
     String addHall(String s, int t);
 
-    T update(T t);
+    int removeCourses(String s);
 
-    int delete(T t);
+    int editHall(String s, int t);
 
     T getDetails(String t);
 }

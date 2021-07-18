@@ -7,6 +7,7 @@ import com.custom.datasources.repository.StudentUtilsDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 @Component
@@ -17,15 +18,6 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
     public StudentDetailsUtils(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
-    RowMapper<Student> rowStudents = (rs, rowNum) -> {
-        Student student = new Student();
-        student.setId(rs.getInt("id"));
-        student.setStudent_id(rs.getString("student_id"));
-        student.setFirst_name(rs.getString("first_name"));
-        student.setLast_name(rs.getString("last_name"));
-        return student;
-    };
 
     RowMapper<Course> rowCourses = (rs, rowNum) -> {
         Course course = new Course();
@@ -42,7 +34,7 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
     };
 
     @Override
-    public void addCourses(String s, List<Integer> course) {
+    public String addCourses(String s, List<Integer> course) {
         int count = 0;
         while(count < course.size()) {
 
@@ -53,6 +45,7 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
                     course.get(count));
             count++;
         }
+        return "Course added successfully";
     }
 
     @Override
@@ -62,15 +55,16 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
         return "Inserted successfully";
     }
 
-
     @Override
-    public Student update(Student student) {
-        return null;
+    public int removeCourses(String s) {
+        String query = "delete from student_courses where student_id = ?";
+        return jdbcTemplate.update(query, s);
     }
 
     @Override
-    public int delete(Student student) {
-        return 0;
+    public int editHall(String s, int hall) {
+        String query = "update student_halls set hall_id = ? where student_id = ?";
+        return jdbcTemplate.update(query, hall, s);
     }
 
     @Override
@@ -86,6 +80,7 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
                 "left join student_halls on student_halls.hall_id = halls.hall_id " +
                 "left join students on students.student_id = student_halls.student_id " +
                 "where students.student_id = ? ";
+
         Hall hall = jdbcTemplate.queryForObject(hallQuery, rowHalls, student_id);
 
         String studentQuery = "select * from students where student_id = ?";
