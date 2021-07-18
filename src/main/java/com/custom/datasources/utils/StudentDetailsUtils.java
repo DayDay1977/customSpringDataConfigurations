@@ -36,7 +36,7 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
     @Override
     public String addCourses(String s, List<Integer> course) {
         int count = 0;
-        while(count < course.size()) {
+        while (count < course.size()) {
 
             String courseQuery = "insert into student_courses values (?,?)";
 
@@ -91,8 +91,8 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
             student.setLast_name(rs.getString("last_name"));
             student.setCourses(courses);
             student.setHall_name(hall);
-           return student;
-       }, student_id);
+            return student;
+        }, student_id);
         return student;
     }
 }
