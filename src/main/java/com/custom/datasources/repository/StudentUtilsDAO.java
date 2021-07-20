@@ -4,9 +4,7 @@ import java.util.List;
 
 public interface StudentUtilsDAO<T> {
 
-    String addCourses(String s, List<Integer> t);
-
-    String addHall(String s, int t);
+    String addCourses(String s,int q, List<Integer> t);
 
     int removeCourses(String s);
 

@@ -40,14 +40,11 @@ public class StudentController {
         return studentService.create(student);
     }
 
-    @PostMapping("/course")
-    private String addCourses(@RequestParam("student_id") String student_id, @RequestParam("courses") List<Integer> courses) {
-        return studentDetailsUtils.addCourses(student_id, courses);
-    }
-
-    @PostMapping("/hall")
-    private String addHall(@RequestParam("student_id") String student_id, @RequestParam("hall") int hall) {
-        return studentDetailsUtils.addHall(student_id, hall);
+    @PostMapping("/details")
+    private String addCourses(@RequestParam("student_id") String student_id,
+                              @RequestParam("hall_id") int hall_id,
+                              @RequestParam("courses") List<Integer> courses) {
+        return studentDetailsUtils.addCourses(student_id, hall_id, courses);
     }
 
     //PutMapping

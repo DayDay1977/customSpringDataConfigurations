@@ -34,8 +34,9 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
     };
 
     @Override
-    public String addCourses(String s, List<Integer> course) {
+    public String addCourses(String s,int t, List<Integer> course) {
         int count = 0;
+
         while (count < course.size()) {
 
             String courseQuery = "insert into student_courses values (?,?)";
@@ -45,14 +46,10 @@ public class StudentDetailsUtils implements StudentUtilsDAO<Student> {
                     course.get(count));
             count++;
         }
-        return "Course added successfully";
-    }
+            String hallQuery = "insert into student_halls values (?,?)";
+            jdbcTemplate.update(hallQuery, s, t);
 
-    @Override
-    public String addHall(String s, int t) {
-        String query = "insert into student_halls values (?,?)";
-        jdbcTemplate.update(query, s, t);
-        return "Inserted successfully";
+        return "Added successfully";
     }
 
     @Override
